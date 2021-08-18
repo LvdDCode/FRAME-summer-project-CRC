@@ -1,0 +1,43 @@
+#Install package 'forestplot', if not done yet.
+install.packages('foresplot')
+
+library(forestplot)
+# Cochrane data from the 'rmeta'-package
+cochrane_from_rmeta <- 
+  structure(list(
+    mean  = c(NA, NA, 1.60, 0.02, 9.91, 1.23, 1.26, 0.03, 1.79, 1.07, 0.10), 
+    lower = c(NA, NA, 0.55, 0.00, 0.33, 0.91, 0.33, 0.00, 0.15, 0.42, 0.01),
+    upper = c(NA, NA, 4.65, 0.44, 299.02, 1.65, 4.77, 0.40, 20.87, 2.71, 0.83)),
+    .Names = c("mean", "lower", "upper"), 
+    row.names = c(NA, -11L), 
+    class = "data.frame")
+
+texttable <- cbind(
+  c("", "Endpoint", "DSS", "DSS", 
+    "DFS", "DFS", "DFS", "DFS", 
+    "OS", "OS", "OS"),
+  c("", "Dataset", "GSE17536", "GSE17537", 
+    "GSE12945", "GSE14333", "GSE17536", "GSE17537", 
+    "GSE12945", "GSE17536", "GSE17537"),
+  c("", "N", "177", "49", 
+    "51", "226", "145", "55", 
+    "62", "177", "55"),
+  c("", "P value", "0.390", "0.0124", 
+    "0.187", "0.181", "0.731", "0.00751", 
+    "0.643", "0.883", "0.0330"),
+  c("", "HR (95% CI)", "1.60 [0.55 - 4.65]", "0.02 [0.00 - 0.44]", "9.91 [0.33 - 299.02]", "1.23 [0.91 - 1.65]", "1.26 [0.33 - 4.77]", 
+    "0.03 [0.00 - 0.40]", "1.79 [0.15 - 20.87]", "1.07 [0.42 - 2.71]", "0.10 [0.01 - 0.83]"))
+
+
+forestplot(texttable,
+           graph.pos = 5,
+           zero = 1,
+           boxsize = 0.2,
+           graphwidth = unit(8,"cm"),
+           txt_gp = fpTxtGp(ticks=gpar(cex=1), xlab=gpar(cex=1, fontface="bold")),
+           xlab = "Hazard Ratio",
+           hrzl_lines = list("3" = gpar(lty = 1)),
+           cochrane_from_rmeta,new_page = TRUE,
+           is.summary = c(TRUE,TRUE,rep(FALSE,9),TRUE),           clip= c(-5.0,15.0), 
+           col = fpColors(box = "darkgrey",
+                          line = "black"))
